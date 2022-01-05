@@ -216,4 +216,14 @@ export const ids = [
 	"49272215164227341957529616276745060366364320606730995167344709439506863882241",
 ];
 
-export const opensea = "0x495f947276749Ce646f68AC8c248420045cb7b5e";
+export const addresses = {
+	opensea: "0x495f947276749Ce646f68AC8c248420045cb7b5e",
+	token: "0x42069abfe407c60cf4ae4112bedead391dba1cdb",
+};
+
+export const abis = {
+	erc1155: [
+		"function balanceOfBatch(address[], uint256[]) external view returns (uint256[])",
+	],
+	erc721: ["function balanceOf(address) external view returns (uint256)"],
+};

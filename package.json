@@ -4,7 +4,10 @@
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
-		"dev": "tsnd src/"
+		"dev": "tsnd src/",
+		"build": "tsc",
+		"prestart": "tsc",
+		"start": "node dist/"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
