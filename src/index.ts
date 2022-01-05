@@ -49,7 +49,7 @@ app.get("/votes", async (req: Request, res: Response) => {
 		};
 	}
 
-	return res.json(score);
+	return res.json({ score });
 });
 
 app.use("*", (_, res: Response) =>
