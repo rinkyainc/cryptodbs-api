@@ -1,6 +1,9 @@
 import { BigNumber } from "@ethersproject/bignumber";
 import express, { Request, Response } from "express";
 import cors from "cors";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 import { ids } from "./constants";
 import { opensea, token } from "./clients";
@@ -50,4 +53,5 @@ app.use("*", (_, res: Response) =>
 	)
 );
 
-app.listen(8080, () => console.log("Listening on http://localhost:8080"));
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log(`Listening on port ${port}`));
