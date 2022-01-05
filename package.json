@@ -6,7 +6,6 @@
 	"scripts": {
 		"dev": "tsnd src/",
 		"build": "tsc",
-		"prestart": "tsc",
 		"start": "node dist/"
 	},
 	"dependencies": {
