@@ -12,30 +12,44 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/votes/:address", async (req: Request, res: Response) => {
-	const { address } = req.params;
+app.get("/votes", async (req: Request, res: Response) => {
+	console.log(req.query);
+	const addresses = (req.query.addresses as string).split(",");
+	const snapshot = req.query.snapshot as string;
 	const blockTag =
-		typeof req.query.blockTag !== "undefined"
-			? isNaN(Number(req.query.blockTag))
-				? "latest"
-				: Number(req.query.blockTag)
+		typeof snapshot !== "undefined"
+			? isNaN(Number(snapshot))
+				? snapshot
+				: Number(snapshot)
 			: "latest";
 
-	const [OSBalances, tokenBalances]: [BigNumber[], BigNumber] =
-		await Promise.all([
-			opensea.balanceOfBatch(Array(ids.length).fill(address), ids, {
-				blockTag,
-			}),
-			token.balanceOf(address, {
-				blockTag,
-			}),
-		]);
+	interface Score {
+		address: string;
+		score: number;
+	}
 
-	res.json({
-		votes:
-			OSBalances.reduce((prev, curr) => prev + curr.toNumber(), 0) +
-			tokenBalances.toNumber(),
-	});
+	const score: Score[] = [];
+
+	for (const [index, address] of addresses.entries()) {
+		const [OSBalances, tokenBalances]: [BigNumber[], BigNumber] =
+			await Promise.all([
+				opensea.balanceOfBatch(Array(ids.length).fill(address), ids, {
+					blockTag,
+				}),
+				token.balanceOf(address, {
+					blockTag,
+				}),
+			]);
+
+		score[index] = {
+			address,
+			score:
+				OSBalances.reduce((prev, curr) => prev + curr.toNumber(), 0) +
+				tokenBalances.toNumber(),
+		};
+	}
+
+	return res.json(score);
 });
 
 app.use("*", (_, res: Response) =>
